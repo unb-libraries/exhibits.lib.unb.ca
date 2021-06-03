@@ -1,0 +1,24 @@
+dockworker:
+  version: '4.0'
+  application:
+    name: exhibits.lib.unb.ca
+    finish_marker: Container startup time
+    project_prefix: EXHIBITS
+    upstream_images:
+      - ghcr.io/unb-libraries/nginx-php:1.x-7.x
+      - mariadb:10.3
+    uuid: 3103
+  deployment:
+    environments:
+      - dev
+      - prod
+  github:
+    repo: exhibits.lib.unb.ca
+    owner: unb-libraries
+  image:
+    push_branches:
+      - dev
+      - prod
+    name: ghcr.io/unb-libraries/exhibits.lib.unb.ca
+    date_tag_image: true
+    repository: ghcr
