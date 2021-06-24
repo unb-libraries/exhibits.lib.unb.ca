@@ -15,6 +15,7 @@ ENV RSYNC_MOVE "${RSYNC_COPY} --remove-source-files"
 COPY build /build
 
 RUN apk --no-cache add \
+    imagemagick \
     mysql-client \
     php-dom \
     php-ctype \
