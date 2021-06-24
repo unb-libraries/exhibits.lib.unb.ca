@@ -2,11 +2,15 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: ospos
+    app: omeka
+    appMajor: "3"
     instance: exhibits.lib.unb.ca
-    tier: pos
+    tier: frontend
     uri: dev-exhibits.lib.unb.ca
-  name: pos-lib-unb-ca
+    vcsOwner: unb-libraries
+    vcsRepository: exhibits.lib.unb.ca
+    vcsRef: dev
+  name: exhibits-lib-unb-ca
   namespace: dev
 spec:
   selector:
@@ -14,7 +18,6 @@ spec:
       uri: dev-exhibits.lib.unb.ca
   replicas: 1
   revisionHistoryLimit: 2
-  minReadySeconds: 30
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -23,22 +26,53 @@ spec:
   template:
     metadata:
       labels:
-        app: ospos
+        app: omeka
+        appMajor: "3"
         instance: exhibits.lib.unb.ca
-        tier: pos
+        tier: frontend
         uri: dev-exhibits.lib.unb.ca
+        vcsOwner: unb-libraries
+        vcsRepository: exhibits.lib.unb.ca
+        vcsRef: dev
     spec:
       nodeSelector:
         deployenv: dev
       containers:
         -
+          name: exhibits-lib-unb-ca
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 30
+            timeoutSeconds: 3
+            periodSeconds: 15
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 100
+            timeoutSeconds: 3
+            periodSeconds: 15
           env:
             -
               name: DEPLOY_ENV
               value: dev
             -
+              name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: exhibits
+                  key: omeka-database
+            -
               name: MYSQL_HOSTNAME
-              value: ospos-mysql-lib-unb-ca
+              value: omeka-mysql-lib-unb-ca
+            -
+              name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: exhibits
+                  key: omeka-password
             -
               name: MYSQL_PORT
               value: "3306"
@@ -49,35 +83,11 @@ spec:
                   name: mysql
                   key: root-password
             -
-              name: MYSQL_DATABASE
+              name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
-                  name: ospos
-                  key: db
-            -
-              name: MYSQL_DATABASE_HIL
-              valueFrom:
-                secretKeyRef:
-                  name: ospos
-                  key: hil-db
-            -
-              name: MYSQL_DATABASE_HWKC
-              valueFrom:
-                secretKeyRef:
-                  name: ospos
-                  key: hwkc-db
-            -
-              name: MYSQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ospos
-                  key: pass
-            -
-              name: MYSQL_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: ospos
-                  key: user
+                  name: exhibits
+                  key: omeka-user
             -
               name: NR_INSTALL_KEY
               valueFrom:
@@ -86,57 +96,20 @@ spec:
                   key: install-key
           image: "||DEPLOYMENTIMAGE||"
           imagePullPolicy: Always
-          name: pos-lib-unb-ca
           ports:
             -
               containerPort: 80
           volumeMounts:
             -
-              mountPath: /app/html/public/uploads
-              name: ospos-persistent-storage
-            -
-              mountPath: /app/hil/public/uploads
-              name: hil-ospos-persistent-storage
-            -
-              mountPath: /app/hwkc/public/uploads
-              name: hwkc-ospos-persistent-storage
-            -
-              name: ospos-spreadsheet
-              mountPath: "/reporting/pos-template.xlsx"
-              subPath: "pos-template.xlsx"
-              readOnly: true
-            -
-              name: ospos-spreadsheet-hwkc
-              mountPath: "/reporting/pos-template-hwkc.xlsx"
-              subPath: "pos-template-hwkc.xlsx"
-              readOnly: true
-      priorityClassName: high-priority-services
+              mountPath: /app/html/files
+              name: omeka-persistent-storage
+      priorityClassName: dev-med-priority-services
       imagePullSecrets:
         -
           name: github-container-registry-auth
       restartPolicy: Always
       volumes:
         -
-          name: ospos-persistent-storage
+          name: omeka-persistent-storage
           persistentVolumeClaim:
-            claimName: pos-lib-unb-ca
-        -
-          name: hil-ospos-persistent-storage
-          persistentVolumeClaim:
-            claimName: hil-pos-lib-unb-ca
-        -
-          name: hwkc-ospos-persistent-storage
-          persistentVolumeClaim:
-            claimName: hwkc-pos-lib-unb-ca
-        - name: ospos-spreadsheet
-          secret:
-            secretName: pos-xls
-            items:
-              - key: pos-template.xlsx
-                path: pos-template.xlsx
-        - name: ospos-spreadsheet-hwkc
-          secret:
-            secretName: pos-xls-hwkc
-            items:
-              - key: pos-template-hwkc.xlsx
-                path: pos-template-hwkc.xlsx
+            claimName: exhibits-lib-unb-ca
