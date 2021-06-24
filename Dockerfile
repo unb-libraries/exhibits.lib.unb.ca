@@ -1,5 +1,5 @@
 FROM ghcr.io/unb-libraries/nginx-php:1.x-7.x
-MAINTAINER Brian Cassidy <libsystems_at_unb.ca>
+MAINTAINER UNB Libraries Systems <libsystems_at_unb.ca>
 
 ARG OMEKA_VERSION=3.0.2
 
