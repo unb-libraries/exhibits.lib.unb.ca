@@ -11,6 +11,11 @@ return [
   'cli' => [
     'phpcli_path' => null,
   ],
+  'oembed' => [
+    'whitelist' => [
+      '#^https://sketchfab\.com/3d-models/.*$#i',
+    ],
+  ],
   'thumbnails' => [
     'types' => [
       'large' => ['constraint' => 800],
