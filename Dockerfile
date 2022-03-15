@@ -1,7 +1,7 @@
 FROM ghcr.io/unb-libraries/nginx-php:1.x-7.x
 MAINTAINER UNB Libraries Systems <libsystems_at_unb.ca>
 
-ARG OMEKA_VERSION=3.0.2
+ARG OMEKA_VERSION=3.1.2
 
 ENV OMEKA_ARCHIVE_FILE omeka-s-${OMEKA_VERSION}.zip
 ENV OMEKA_DOWNLOAD_URL https://github.com/omeka/omeka-s/releases/download/v${OMEKA_VERSION}/${OMEKA_ARCHIVE_FILE}
