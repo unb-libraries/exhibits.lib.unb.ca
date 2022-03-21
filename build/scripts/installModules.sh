@@ -9,4 +9,9 @@ curl -OL https://github.com/omeka-s-modules/Mapping/releases/download/v1.5.0/Map
 unzip Mapping-1.5.0.zip
 $RSYNC_MOVE Mapping "$APP_WEBROOT/modules/"
 
+# Collecting.
+curl -OL https://github.com/omeka-s-modules/Collecting/releases/download/v1.8.0/Collecting-1.8.0.zip
+unzip Collecting-1.8.0.zip
+$RSYNC_MOVE Collecting "$APP_WEBROOT/modules/"
+
 rm -rf /tmp/modules
