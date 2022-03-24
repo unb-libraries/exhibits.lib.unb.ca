@@ -34,7 +34,8 @@ RUN apk --no-cache add \
   ${RSYNC_MOVE} /build/package-conf/nginx/ /etc/nginx/conf.d/ && \
   ${RSYNC_MOVE} /build/package-conf/php/conf.d/ /etc/php7/conf.d/ && \
   ${RSYNC_MOVE} /build/scripts/ /scripts/ && \
-  /scripts/installModules.sh
+  /scripts/installModules.sh && \
+  /scripts/installThemes.sh
 
 # Metadata
 ARG BUILD_DATE
