@@ -9,6 +9,8 @@ services:
     networks:
       - exhibits.lib.unb.ca
     restart: unless-stopped
+    volumes:
+      - mysql-data:/var/lib/mysql
   exhibits.lib.unb.ca:
     build:
       context: .
@@ -25,3 +27,5 @@ services:
 networks:
   exhibits.lib.unb.ca:
     name: exhibits.lib.unb.ca
+volumes:
+  mysql-data:
