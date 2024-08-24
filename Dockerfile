@@ -3,14 +3,14 @@ MAINTAINER UNB Libraries Systems <libsystems_at_unb.ca>
 
 ARG OMEKA_VERSION=3.1.2
 
-ENV OMEKA_ARCHIVE_FILE omeka-s-${OMEKA_VERSION}.zip
-ENV OMEKA_DOWNLOAD_URL https://github.com/omeka/omeka-s/releases/download/v${OMEKA_VERSION}/${OMEKA_ARCHIVE_FILE}
-ENV OMEKA_INSTALLED_MARKER ${APP_WEBROOT}/files/.omeka_installed
-ENV SITE_URI exhibits.lib.unb.ca
+ENV OMEKA_ARCHIVE_FILE="omeka-s-${OMEKA_VERSION}.zip"
+ENV OMEKA_DOWNLOAD_URL="https://github.com/omeka/omeka-s/releases/download/v${OMEKA_VERSION}/${OMEKA_ARCHIVE_FILE}"
+ENV OMEKA_INSTALLED_MARKER="${APP_WEBROOT}/files/.omeka_installed"
+ENV SITE_URI="exhibits.lib.unb.ca"
 
-ENV RSYNC_FLAGS --quiet
-ENV RSYNC_COPY "rsync -a --inplace --no-compress ${RSYNC_FLAGS}"
-ENV RSYNC_MOVE "${RSYNC_COPY} --remove-source-files"
+ENV RSYNC_FLAGS="--quiet"
+ENV RSYNC_COPY=""rsync -a --inplace --no-compress ${RSYNC_FLAGS}""
+ENV RSYNC_MOVE=""${RSYNC_COPY} --remove-source-files""
 
 COPY build /build
 
