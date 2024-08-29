@@ -8,8 +8,8 @@ ENV OMEKA_INSTALLED_MARKER="${APP_WEBROOT}/files/.omeka_installed"
 ENV SITE_URI="exhibits.lib.unb.ca"
 
 ENV RSYNC_FLAGS="--quiet"
-ENV RSYNC_COPY=""rsync -a --inplace --no-compress ${RSYNC_FLAGS}""
-ENV RSYNC_MOVE=""${RSYNC_COPY} --remove-source-files""
+ENV RSYNC_COPY="rsync -a --inplace --no-compress ${RSYNC_FLAGS}"
+ENV RSYNC_MOVE="${RSYNC_COPY} --remove-source-files"
 
 COPY build /build
 
