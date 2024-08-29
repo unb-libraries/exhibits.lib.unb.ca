@@ -1,5 +1,4 @@
 FROM ghcr.io/unb-libraries/nginx-php:1.x-7.x
-MAINTAINER UNB Libraries Systems <libsystems_at_unb.ca>
 
 ARG OMEKA_VERSION=3.1.2
 
@@ -53,4 +52,5 @@ LABEL ca.unb.lib.generator="omeka" \
       org.label-schema.vcs-url="https://github.com/unb-libraries/exhibits.lib.unb.ca" \
       org.label-schema.vendor="University of New Brunswick Libraries" \
       org.label-schema.version=$VERSION \
+      org.opencontainers.image.authors="UNB Libraries <libsupport@unb.ca>" \
       org.opencontainers.image.source="https://github.com/unb-libraries/exhibits.lib.unb.ca"
