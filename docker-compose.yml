@@ -11,12 +11,12 @@ services:
     restart: unless-stopped
     volumes:
       - mysql-data:/var/lib/mysql
-  exhibits.lib.unb.ca:
+  exhibits-lib-unb-ca:
     build:
       context: .
     env_file:
       - ./env/omeka.env
-    container_name: exhibits.lib.unb.ca
+    container_name: exhibits-lib-unb-ca
     expose:
       - "80"
     networks:

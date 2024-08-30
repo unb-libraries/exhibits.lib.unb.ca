@@ -1,27 +1,55 @@
 dockworker:
-  version: '5'
+  version: '6'
   application:
-    name: exhibits.lib.unb.ca
-    finish_marker: 99_zz_notify_user_URI
-    project_prefix: EXHIBITS
-    upstream_images:
-      - ghcr.io/unb-libraries/nginx-php:1.x-7.x
-      - mariadb:10.3
-    uuid: 3103
-  deployment:
-    environments:
+    name: Provides a single entrypoint for various digital 'exhibits' at UNB Libraries.
+    uri: https://exhibits.lib.unb.ca
+    description: >
+      Provides a single entrypoint for various digital 'exhibits' at UNB Libraries.
+    topics:
+      - exhibits
+      - omeka
+    identifiers:
+      id: exhibits.lib.unb.ca
+      slug: exhibits-lib-unb-ca
+      short_slug: exhibits
+      uuid: 3103
+    framework:
+      name: Omeka
+      version: 3
+      startup_finished_marker: '99_zz_notify_user_URI'
+      endpoint:
+        name: http
+        port: 80
+        readiness_timeout: 15
+    license:
+      license: MIT
+      holder: University of New Brunswick Libraries
+    shell:
+      path: /bin/sh
+  endpoints:
+    env:
       - dev
       - prod
-    workflow:
-      source: dockworker
-      type: deployment-workflow
-  github:
-    repo: exhibits.lib.unb.ca
-    owner: unb-libraries
-  image:
-    push_branches:
-      - dev
-      - prod
-    name: ghcr.io/unb-libraries/exhibits.lib.unb.ca
-    date_tag_image: true
-    repository: ghcr
+    deployments:
+      exhibits-lib-unb-ca:
+        default: true
+        managed: true
+        name: exhibits-lib-unb-ca
+      omeka-mysql-lib-unb-ca:
+        managed: false
+        name: mysql
+  workflows:
+    vcs:
+      type: github
+      owner: unb-libraries
+      name: exhibits.lib.unb.ca
+    jira:
+      project_keys:
+        - EXHIBITS
+    image:
+      name: ghcr.io/unb-libraries/exhibits.lib.unb.ca
+      parent: ghcr.io/unb-libraries/nginx-php:1.x-7.x
+      repository: GitHub
+      push-branches:
+        - dev
+        - prod
