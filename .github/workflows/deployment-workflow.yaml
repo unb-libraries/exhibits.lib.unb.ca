@@ -15,7 +15,6 @@ jobs:
       image-name: 'ghcr.io/unb-libraries/exhibits.lib.unb.ca'
       k8s-deployment-name: 'exhibits-lib-unb-ca'
       platforms: linux/amd64
-      push-branches: '["dev","prod"]'
     secrets:
       KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
