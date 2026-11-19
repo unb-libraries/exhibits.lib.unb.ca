@@ -1,38 +1,39 @@
-FROM ghcr.io/unb-libraries/nginx-php:1.x-7.x
+FROM ghcr.io/unb-libraries/nginx-php:3.24.x
 
-ARG OMEKA_VERSION=3.1.2
+ARG OMEKA_VERSION=4.2.1
 
 ENV OMEKA_ARCHIVE_FILE="omeka-s-${OMEKA_VERSION}.zip"
 ENV OMEKA_DOWNLOAD_URL="https://github.com/omeka/omeka-s/releases/download/v${OMEKA_VERSION}/${OMEKA_ARCHIVE_FILE}"
 ENV OMEKA_INSTALLED_MARKER="${APP_WEBROOT}/files/.omeka_installed"
 ENV SITE_URI="exhibits.lib.unb.ca"
 
-ENV RSYNC_FLAGS="--quiet"
-ENV RSYNC_COPY="rsync -a --inplace --no-compress ${RSYNC_FLAGS}"
-ENV RSYNC_MOVE="${RSYNC_COPY} --remove-source-files"
-
 COPY build /build
 
 RUN apk --no-cache add \
     imagemagick \
     mysql-client \
-    php-dom \
-    php-ctype \
-    php-fileinfo \
-    php-mbstring \
-    php-pdo \
-    php-pdo_mysql \
-    php-session \
-    php-tokenizer \
-    php-xml \
-    php-xmlwriter \
-    rsync && \
-  curl -LO ${OMEKA_DOWNLOAD_URL} && mv ${OMEKA_ARCHIVE_FILE} /tmp && cd /tmp && unzip -q ${OMEKA_ARCHIVE_FILE} && rm ${OMEKA_ARCHIVE_FILE} && \
-  ${RSYNC_MOVE} /tmp/omeka-s/ /app/html/ && \
-  ${RSYNC_MOVE} /build/config/ /app/html/config/ && \
-  ${RSYNC_MOVE} /build/package-conf/nginx/ /etc/nginx/conf.d/ && \
-  ${RSYNC_MOVE} /build/package-conf/php/conf.d/ /etc/php7/conf.d/ && \
+    php${PHP_VERSION}-ctype \
+    php${PHP_VERSION}-dom \
+    php${PHP_VERSION}-fileinfo \
+    php${PHP_VERSION}-intl \
+    php${PHP_VERSION}-mbstring \
+    php${PHP_VERSION}-pdo \
+    php${PHP_VERSION}-pdo_mysql \
+    php${PHP_VERSION}-session \
+    php${PHP_VERSION}-simplexml \
+    php${PHP_VERSION}-tokenizer \
+    php${PHP_VERSION}-xmlwriter && \
+  curl -sSL -o "/tmp/${OMEKA_ARCHIVE_FILE}" "${OMEKA_DOWNLOAD_URL}" && \
+  unzip -q "/tmp/${OMEKA_ARCHIVE_FILE}" -d /tmp && \
+  rm -f "/tmp/${OMEKA_ARCHIVE_FILE}" && \
+  ${RSYNC_MOVE} /tmp/omeka-s/ "${APP_WEBROOT}/" && \
+  rm -rf /tmp/omeka-s && \
+  ${RSYNC_MOVE} /build/config/ "${APP_WEBROOT}/config/" && \
+  ${RSYNC_MOVE} /build/package-conf/nginx/app.conf "${NGINX_APP_CONF_FILE}" && \
+  ${RSYNC_MOVE} /build/package-conf/nginx/daemon/ "${NGINX_CONFD_DIR}/daemon/" && \
+  ${RSYNC_MOVE} /build/package-conf/php/conf.d/omeka.ini "${PHP_CONFD_DIR}/zz_omeka.ini" && \
   ${RSYNC_MOVE} /build/scripts/ /scripts/ && \
+  chmod -R 755 /scripts && \
   /scripts/installModules.sh && \
   /scripts/installThemes.sh
 

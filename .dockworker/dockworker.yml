@@ -15,7 +15,7 @@ dockworker:
       uuid: 3103
     framework:
       name: Omeka
-      version: 3
+      version: 4
       startup_finished_marker: '99_zz_notify_user_URI'
       endpoint:
         name: http
@@ -48,7 +48,7 @@ dockworker:
         - EXHIBITS
     image:
       name: ghcr.io/unb-libraries/exhibits.lib.unb.ca
-      parent: ghcr.io/unb-libraries/nginx-php:1.x-7.x
+      parent: ghcr.io/unb-libraries/nginx-php:3.24.x
       repository: GitHub
       push-branches:
         - dev
