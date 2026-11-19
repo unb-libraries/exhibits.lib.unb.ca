@@ -35,9 +35,9 @@ dockworker:
         default: true
         managed: true
         name: exhibits-lib-unb-ca
-      omeka-mysql-lib-unb-ca:
+      exhibits-mariadb-lib-unb-ca:
         managed: false
-        name: mysql
+        name: mariadb
   workflows:
     vcs:
       type: github
